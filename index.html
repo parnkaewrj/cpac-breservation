@@ -93,6 +93,13 @@
             box-shadow: 0 0 0 3px rgba(212, 165, 217, 0.1);
         }
 
+        input:disabled,
+        select:disabled {
+            background-color: #f0f0f0;
+            color: #999;
+            cursor: not-allowed;
+        }
+
         textarea {
             resize: vertical;
             min-height: 100px;
@@ -240,6 +247,24 @@
 
             <div class="form-row">
                 <div class="form-group">
+                    <label for="contract">Contract <span class="required">*</span></label>
+                    <select id="contract" name="contract" required>
+                        <option value="">Select a contract</option>
+                        <option value="Contract A">Contract A</option>
+                        <option value="Contract B">Contract B</option>
+                        <option value="Contract C">Contract C</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="place">Place <span class="required">*</span></label>
+                    <select id="place" name="place" required disabled>
+                        <option value="">Select a place</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
                     <label for="reservationDate">Reservation Date <span class="required">*</span></label>
                     <input type="date" id="reservationDate" name="reservationDate" required>
                 </div>
@@ -283,6 +308,36 @@
     </div>
 
     <script>
+        // Define the relationship between contracts and places
+        const contractPlaceMapping = {
+            'Contract A': ['Place A1', 'Place A2', 'Place A3'],
+            'Contract B': ['Place B1', 'Place B2'],
+            'Contract C': ['Place C1', 'Place C2', 'Place C3', 'Place C4']
+        };
+
+        // Handle contract change event
+        document.getElementById('contract').addEventListener('change', function() {
+            const selectedContract = this.value;
+            const placeSelect = document.getElementById('place');
+            
+            // Clear existing options except the first one
+            placeSelect.innerHTML = '<option value="">Select a place</option>';
+            
+            if (selectedContract && contractPlaceMapping[selectedContract]) {
+                // Enable the place dropdown and add options
+                placeSelect.disabled = false;
+                contractPlaceMapping[selectedContract].forEach(place => {
+                    const option = document.createElement('option');
+                    option.value = place;
+                    option.textContent = place;
+                    placeSelect.appendChild(option);
+                });
+            } else {
+                // Disable if no contract selected
+                placeSelect.disabled = true;
+            }
+        });
+
         // Set minimum date to today
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('reservationDate').setAttribute('min', today);
@@ -295,6 +350,8 @@
                 name: document.getElementById('name').value,
                 email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
+                contract: document.getElementById('contract').value,
+                place: document.getElementById('place').value,
                 reservationDate: document.getElementById('reservationDate').value,
                 timeSlot: document.getElementById('timeSlot').value,
                 numberOfGuests: document.getElementById('numberOfGuests').value,
@@ -309,6 +366,8 @@
                     if (result.success) {
                         showAlert(result.message, 'success');
                         document.getElementById('reservationForm').reset();
+                        // Reset place dropdown when form resets
+                        document.getElementById('place').disabled = true;
                     } else {
                         showAlert(result.message, 'error');
                     }
