@@ -370,74 +370,56 @@
             }
         });
 
-        // Set minimum date to today
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('reservationDate').setAttribute('min', today);
+// Set minimum date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('startDate').setAttribute('min', today);
+document.getElementById('endDate').setAttribute('min', today);
 
-        // Set format for date
-        function formatToDDMMYYYY(dateString) {
-            const d = new Date(dateString);
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-            return `${day}-${month}-${year}`;
-        }
+// Convert yyyy-mm-dd → dd-mm-yyyy
+function formatDate(dateString) {
+    const d = new Date(dateString);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+}
 
-        document.getElementById("startDate").addEventListener("change", function () {
-            console.log(formatToDDMMYYYY(this.value));
-        });
+document.getElementById('reservationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-        document.getElementById("endDate").addEventListener("change", function () {
-            console.log(formatToDDMMYYYY(this.value));
-        });
+    const formData = {
+        contract: document.getElementById('contract').value,
+        place: document.getElementById('place').value,
+        Concrete: document.getElementById('Concrete').value,
+        Size: document.getElementById('Size').value,
+        Amount: document.getElementById('Amount').value,
+        timeSlot: document.getElementById('timeSlot').value,
+        startDate: formatDate(document.getElementById('startDate').value),
+        endDate: formatDate(document.getElementById('endDate').value),
+        Name: document.getElementById('Name').value,
+        phone: document.getElementById('phone').value,
+        specialRequests: document.getElementById('specialRequests').value
+    };
 
-        // Convert yyyy-mm-dd → dd-mm-yyyy
-        function formatDate(dateString) {
-            const d = new Date(dateString);
-            const day = String(d.getDate()).padStart(2, '0');
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const year = d.getFullYear();
-              return `${day}-${month}-${year}`;
-        }
-        
+    showLoading(true);
 
-        // Form submission
-        document.getElementById('reservationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const formData = {
-                contract: document.getElementById('contract').value,
-                place: document.getElementById('place').value,
-                Concrete: document.getElementById('Concrete').value,
-                Size: document.getElementById('Size').value,
-                Amount: document.getElementById('Amount').value,
-                timeSlot: document.getElementById('timeSlot').value,
-                startDate: formatDate(document.getElementById('startDate').value),
-                endDate: formatDate(document.getElementById('endDate').value),
-                Name: document.getElementById('Name').value,
-                phone: document.getElementById('phone').value,
-                specialRequests: document.getElementById('specialRequests').value
-            };
-
-            showLoading(true);
-
-            google.script.run
-                .withSuccessHandler(function(result) {
-                    showLoading(false);
-                    if (result.success) {
-                        showAlert(result.message, 'success');
-                        document.getElementById('reservationForm').reset();
-                        document.getElementById('place').disabled = true;
-                    } else {
-                        showAlert(result.message, 'error');
-                    }
-                })
-                .withFailureHandler(function(error) {
-                    showLoading(false);
-                    showAlert('Error: ' + error, 'error');
-                })
-                .saveReservation(formData);
-        });
+    google.script.run
+        .withSuccessHandler(function(result) {
+            showLoading(false);
+            if (result.success) {
+                showAlert(result.message, 'success');
+                document.getElementById('reservationForm').reset();
+                document.getElementById('place').disabled = true;
+            } else {
+                showAlert(result.message, 'error');
+            }
+        })
+        .withFailureHandler(function(error) {
+            showLoading(false);
+            showAlert('Error: ' + error, 'error');
+        })
+        .saveReservation(formData);
+});
 
 
         function showAlert(message, type) {
