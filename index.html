@@ -218,8 +218,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1><i class="fas fa-calendar-check"></i> Reservation Request</h1>
-            <p>Please fill in the form below to request a reservation</p>
+            <h1><i class="fas fa-calendar-check"></i> CPAC Reservation Request</h1>
+            <p>กรอกและเลือกข้อมูลทั้งหมดที่มีดอกจันสีแดง</p>
         </div>
 
         <div id="alertMessage" class="alert"></div>
@@ -233,16 +233,19 @@
                 <div class="form-group">
                     <label for="contract">Contract <span class="required">*</span></label>
                     <select id="contract" name="contract" required>
-                        <option value="">Select a contract</option>
-                        <option value="Contract A">Contract A</option>
-                        <option value="Contract B">Contract B</option>
-                        <option value="Contract C">Contract C</option>
+                        <option value="">เลือกสัญญา</option>
+                        <option value="Contract A">ป17-06-68</option>
+                        <option value="Contract B">ป54-07-68</option>
+                        <option value="Contract C">ฝจส.ป-06(68)</option>
+                        <option value="Contract C">ฝจส.ป-11(68)</option>
+                        <option value="Contract C">ฝจส.ป-14(68)</option>
+                        <option value="Contract C">ฝจส.ป-15(68)</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="place">Place <span class="required">*</span></label>
                     <select id="place" name="place" required disabled>
-                        <option value="">Select a place</option>
+                        <option value="">เลือกเส้นทาง</option>
                     </select>
                 </div>
             </div>
@@ -254,6 +257,7 @@
                         <option value="">Select a Concrete</option>
                         <option value="CY 210 KSC./7 DAYS">CY 210 KSC./7 DAYS</option>
                         <option value="CY 280 KSC./7 DAYS">CY 280 KSC./7 DAYS</option>
+                        <option value="CY 280 KSC./7 DAYS">CY 280 KSC./24 HRS.</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -275,7 +279,7 @@
                <div class="form-group">
                     <label for="timeSlot">Time Slot <span class="required">*</span></label>
                     <select id="timeSlot" name="timeSlot" required>
-                        <option value="">Select a time</option>
+                        <option value="">เวลาที่ต้องการเท</option>
                         <option value="09:00 AM">09:00 AM</option>
                         <option value="10:00 AM">10:00 AM</option>
                         <option value="11:00 AM">11:00 AM</option>
@@ -293,12 +297,12 @@
             
             <div class="form-row">
                 <div class="form-group">
-                    <label for="reservationDate">Reservation Date <span class="required">*</span></label>
+                    <label for="reservationDate">เริ่มเทตั้งแต่ <span class="required">*</span></label>
                     <input type="date" id="reservationDate" name="reservationDate" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="reservationDate">Reservation Date <span class="required">*</span></label>
+                    <label for="reservationDate">ถึงวันที่ <span class="required">*</span></label>
                     <input type="date" id="reservationDate" name="reservationDate" required>
                 </div>
             </div>
@@ -317,8 +321,8 @@
             </div>
                 
             <div class="form-group">
-                <label for="specialRequests">Special Requests</label>
-                <textarea id="specialRequests" name="specialRequests" placeholder="Any special requirements or preferences..."></textarea>
+                <label for="specialRequests">หมายเหตุ</label>
+                <textarea id="specialRequests" name="specialRequests" placeholder="กรณี ช่างคนใหม่ ไม่มีให้เลือกให้พิมพ์ชื่อและเบอร์โทรศัพท์ตรงนี้ + กรณี เทคอนกรีตอื่นๆ"></textarea>
             </div>
 
             <div class="button-group">
@@ -335,9 +339,12 @@
     <script>
         // Define the relationship between contracts and places
         const contractPlaceMapping = {
-            'Contract A': ['Place A1', 'Place A2', 'Place A3'],
-            'Contract B': ['Place B1', 'Place B2'],
-            'Contract C': ['Place C1', 'Place C2', 'Place C3', 'Place C4']
+            'ป17-06-68': ['ซอยเทศบาลบางปู 118', 'ซอยหมู่บ้านเด่นชัยสามัคคี', 'ซอยวัดสุขกร-สวมส้ม'],
+            'ป54-07-68': ['ซอยโรงสวด'],
+            'ฝจส.ป-06(68)': ['ถนนรามคำแหง', 'ซอยย่อยข้าง ทบ.6', 'หมู่บ้านเพชรงาม 3', 'ซอยเทศบาลบางปู 59/1'],
+            'ฝจส.ป-11(68)': ['ซอยบางหัวเสือ'],
+            'ฝจส.ป-14(68)': ['ซอยพัฒนาการ 20 แยก 5', 'ซอยเทศบาลบางปู 61 A (แยกผู้ใหญ่จิต)'],
+            'ฝจส.ป-15(68)': ['ซอยพัฒนาการ 52 (หมู่บ้านเคหะนคร)']
         };
 
         // Handle contract change event
