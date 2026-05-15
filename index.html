@@ -395,28 +395,29 @@
         // Form submission
         document.getElementById('reservationForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
                 contract: document.getElementById('contract').value,
                 place: document.getElementById('place').value,
-                reservationDate: document.getElementById('reservationDate').value,
+                Concrete: document.getElementById('Concrete').value,
+                Size: document.getElementById('Size').value,
+                Amount: document.getElementById('Amount').value,
                 timeSlot: document.getElementById('timeSlot').value,
-                numberOfGuests: document.getElementById('numberOfGuests').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                Name: document.getElementById('Name').value,
+                phone: document.getElementById('phone').value,
                 specialRequests: document.getElementById('specialRequests').value
             };
 
             showLoading(true);
-            
+
             google.script.run
                 .withSuccessHandler(function(result) {
                     showLoading(false);
                     if (result.success) {
                         showAlert(result.message, 'success');
                         document.getElementById('reservationForm').reset();
-                        // Reset place dropdown when form resets
                         document.getElementById('place').disabled = true;
                     } else {
                         showAlert(result.message, 'error');
@@ -428,6 +429,7 @@
                 })
                 .saveReservation(formData);
         });
+
 
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
