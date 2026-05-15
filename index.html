@@ -374,6 +374,14 @@
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('reservationDate').setAttribute('min', today);
 
+        // Set date format
+        function formatDate(input) {
+            const d = new Date(input.value);
+            const options = { day: "2-digit", month: "short", year: "numeric" };
+            const formatted = d.toLocaleDateString("en-GB", options).replace(/ /g, "-");
+            document.getElementById("result").value = formatted;
+        }
+
         // Form submission
         document.getElementById('reservationForm').addEventListener('submit', function(e) {
             e.preventDefault();
