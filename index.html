@@ -391,6 +391,15 @@
             console.log(formatToDDMMYYYY(this.value));
         });
 
+        // Convert yyyy-mm-dd → dd-mm-yyyy
+        function formatDate(dateString) {
+            const d = new Date(dateString);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+              return `${day}-${month}-${year}`;
+        }
+        
 
         // Form submission
         document.getElementById('reservationForm').addEventListener('submit', function(e) {
@@ -403,8 +412,8 @@
                 Size: document.getElementById('Size').value,
                 Amount: document.getElementById('Amount').value,
                 timeSlot: document.getElementById('timeSlot').value,
-                startDate: document.getElementById('startDate').value,
-                endDate: document.getElementById('endDate').value,
+                startDate: formatDate(document.getElementById('startDate').value),
+                endDate: formatDate(document.getElementById('endDate').value),
                 Name: document.getElementById('Name').value,
                 phone: document.getElementById('phone').value,
                 specialRequests: document.getElementById('specialRequests').value
