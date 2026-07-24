@@ -1,512 +1,315 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-<base target="_top">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Requisition Form</title>
-<script src="https://cdn.tailwindcss.com/3.4.17"></script>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  body { font-family: 'Noto Sans Thai', sans-serif; background:#fff; color:#1A1A1A; }
-  .field-label { font-size:12px; text-transform:uppercase; color:#666; margin-bottom:4px; display:block; font-weight:600; letter-spacing:.5px; }
-  .field-input { height:40px; background:#F5F5F5; border:1px solid #CCCCCC; border-radius:4px; padding:8px 12px; width:100%; font-size:14px; color:#1A1A1A; font-family:'Noto Sans Thai',sans-serif; transition:border-color .15s; }
-  .field-input:focus { outline:none; border-color:#2C3E50; background:#FFFFFF; }
-  .field-input.error { border-color:#DC2626; background:#FEF2F2; }
-  .field-input:read-only { background:#EEEEEE; color:#666; cursor:not-allowed; }
-  .table-input { height:36px; font-size:13px; }
-  table th { font-size:12px; text-transform:uppercase; color:#666; font-weight:600; }
-  table tbody tr:nth-child(even) { background:#FAFAFA; }
-  .btn-primary { background:#2C3E50; color:#fff; transition:background .15s; }
-  .btn-primary:hover:not(:disabled) { background:#34495E; }
-  .btn-primary:disabled { background:#999; cursor:not-allowed; opacity:.6; }
-  .btn-outline { background:#fff; border:1px solid #CCCCCC; color:#1A1A1A; transition:all .15s; }
-  .btn-outline:hover { border-color:#2C3E50; background:#F5F5F5; }
-  .delete-btn { transition:color .15s; }
-  .delete-btn:hover { color:#DC2626; }
-  .error-text { color:#DC2626; font-size:12px; margin-top:4px; }
-  .loader { border:3px solid #f3f3f3; border-top:3px solid #2C3E50; border-radius:50%; width:24px; height:24px; animation:spin 1s linear infinite; }
-  @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
-  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:50; }
-  .overlay.show { display:flex; }
-  .modal { background:#fff; border-radius:8px; padding:24px; max-width:400px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,.2); }
-  .toast { position:fixed; top:20px; right:20px; padding:12px 20px; border-radius:4px; color:#fff; font-weight:600; font-size:14px; z-index:60; transform:translateX(120%); transition:transform .3s ease; max-width:380px; }
-  .toast.show { transform:translateX(0); }
-  .toast.success { background:#16A34A; }
-  .toast.error { background:#DC2626; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Noto Sans Thai', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(160deg, #f7f5f3 0%, #ede9e5 50%, #e4ddd6 100%);
+      color: #2d2620;
+    }
+
+    /* ── Header ── */
+    header {
+      background: #f5f1ed;
+      padding: 20px 24px;
+      box-shadow: 0 2px 16px rgba(45, 38, 32, 0.08);
+      text-align: center;
+      position: relative;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: #b8a393;
+      border-radius: 2px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #2d2620;
+    }
+
+    .logo span {
+      color: #9c8575;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      font-weight: 400;
+      color: #8a7d73;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── Main ── */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px 40px;
+      gap: 16px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #a0958a;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      max-width: 380px;
+      padding: 18px 24px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 17px;
+      color: #2d2620;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(45, 38, 32, 0.12);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .btn-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .btn-text small {
+      font-size: 12px;
+      font-weight: 400;
+      color: #8a7d73;
+    }
+
+    .btn-arrow {
+      margin-left: auto;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: all 0.25s ease;
+      color: #8a7d73;
+    }
+
+    .btn:hover .btn-arrow {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Button Variants */
+    .btn-requisition {
+      background: #d4c4b8;
+    }
+    .btn-requisition:hover { background: #ccbcaf; }
+    .btn-requisition .btn-icon { background: rgba(45, 38, 32, 0.1); }
+
+    .btn-transfer {
+      background: #c9bdb3;
+    }
+    .btn-transfer:hover { background: #c0b3a8; }
+    .btn-transfer .btn-icon { background: rgba(45, 38, 32, 0.1); }
+
+    .btn-received {
+      background: #d4c4b8;
+    }
+    .btn-received:hover { background: #ccbcaf; }
+    .btn-received .btn-icon { background: rgba(45, 38, 32, 0.1); }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 20px 24px;
+      font-size: 12px;
+      color: #a0958a;
+    }
+
+    .user-email {
+      font-size: 12px;
+      color: #8a7d73;
+      margin-bottom: 4px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 480px) {
+      .logo { font-size: 24px; }
+      .btn { padding: 16px 20px; font-size: 16px; }
+      .btn-icon { width: 38px; height: 38px; }
+      main { padding: 36px 16px 32px; }
+    }
+  </style>
 </head>
-<body class="min-h-screen p-6 md:p-10">
+<body>
 
-<!-- Loading -->
-<div id="loading-overlay" class="overlay">
-  <div class="modal flex flex-col items-center gap-3">
-    <div class="loader"></div>
-    <p id="loading-text" class="text-sm">Loading...</p>
-  </div>
-</div>
-
-<!-- Confirm -->
-<div id="confirm-overlay" class="overlay">
-  <div class="modal">
-    <h3 class="font-bold text-lg mb-2">Confirm Action</h3>
-    <p id="confirm-message" class="text-sm text-gray-700 mb-5">Are you sure?</p>
-    <div class="flex justify-end gap-3">
-      <button type="button" id="confirm-no" class="btn-outline rounded px-4 py-2 text-sm font-semibold">Cancel</button>
-      <button type="button" id="confirm-yes" class="btn-primary rounded px-4 py-2 text-sm font-semibold">Confirm</button>
-    </div>
-  </div>
-</div>
-
-<!-- Toast -->
-<div id="toast" class="toast"></div>
-
-<main class="max-w-5xl mx-auto">
-  <header class="mb-8">
-    <h1 class="text-3xl font-bold">Requisition Form</h1>
-    <p class="text-sm text-gray-600 mt-1">Document Information</p>
+  <header>
+    <div class="logo">Supply<span>Matter</span></div>
+    <div class="subtitle">ระบบจัดการวัสดุและพัสดุ</div>
   </header>
 
-  <form id="req-form" onsubmit="handleSubmit(event)">
-    <!-- Main fields -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-10">
-      <div>
-        <label class="field-label" for="po-number">PO Number *</label>
-        <select id="po-number" class="field-input" onchange="onPOChange()">
-          <option value="">-- Select --</option>
-        </select>
+  <main>
+    <div class="section-label">เลือกฟอร์ม</div>
+
+    <a class="btn btn-requisition"
+       href="https://script.google.com/macros/s/AKfycbx88ZTOcBMIW71dX1USU9STaMg1Y0dbVoHOHP98t9qRxvJJU5kOKc0MMuXNjMqhRGh0/exec"
+       target="_blank" rel="noopener noreferrer">
+      <div class="btn-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
       </div>
-      <div>
-        <label class="field-label" for="contract">Contract</label>
-        <input id="contract" type="text" class="field-input" readonly placeholder="Auto-populated">
+      <div class="btn-text">
+        ใบเบิกพัสดุ
+        <small>Supplier Requisition</small>
       </div>
-      <div>
-        <label class="field-label" for="place-code">Place Code *</label>
-        <input id="place-code" type="text" class="field-input"
-               list="place-code-list" placeholder="xx-xx-xx-xxxxxx" autocomplete="off">
-        <datalist id="place-code-list"></datalist>
+      <div class="btn-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
       </div>
-      <div>
-        <label class="field-label" for="sap-number">SAP Number *</label>
-        <input id="sap-number" type="text" class="field-input" maxlength="10"
-               placeholder="10 digits" inputmode="numeric" oninput="validateSAP(this)">
-        <span id="sap-error" class="error-text hidden">Must be exactly 10 digits</span>
+    </a>
+
+    <a class="btn btn-transfer"
+       href="https://script.google.com/macros/s/AKfycbySaLS5b1np5zRpiY6eFf9MM-iRyYqQZJHsx5SLZgH_YcO2Zf8ARUzpldA_uQeGfuUpEQ/exec"
+       target="_blank" rel="noopener noreferrer">
+      <div class="btn-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="17 1 21 5 17 9"/>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"/>
+          <polyline points="7 23 3 19 7 15"/>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+        </svg>
       </div>
-      <div>
-        <label class="field-label" for="number-field">Number</label>
-        <input id="number-field" type="text" class="field-input" placeholder="Enter number">
+      <div class="btn-text">
+        โอนย้ายพัสดุ
+        <small>Transfer Items</small>
       </div>
-      <div>
-        <label class="field-label" for="date-field">Date</label>
-        <input id="date-field" type="date" class="field-input">
+      <div class="btn-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
       </div>
-    </section>
+    </a>
 
-    <!-- Line items -->
-    <section class="mb-10">
-      <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
-  <h2 class="text-lg font-semibold">Line Items</h2>
-  <div class="flex items-center gap-3 flex-wrap">
-    <button type="button" onclick="clearAll()" class="btn-outline flex items-center gap-1 px-3 py-2 rounded text-sm font-semibold">🗑 Clear All</button>
-    <button type="button" onclick="addRow()" class="btn-primary flex items-center gap-1 px-3 py-2 rounded text-sm font-semibold">+ Add New Row</button>
-
-    <!-- ✅ NEW: Bulk row selector -->
-    <div class="flex items-center gap-2 border-l border-gray-300 pl-3">
-      <label for="bulk-row-count" class="text-xs text-gray-600 uppercase font-semibold whitespace-nowrap">Set Rows:</label>
-      <select id="bulk-row-count" class="field-input" style="height:38px; width:90px; padding:4px 8px;">
-        <!-- Options populated by JS -->
-      </select>
-      <button type="button" onclick="applyBulkRows()" class="btn-outline rounded px-3 py-2 text-sm font-semibold">Apply</button>
-    </div>
-  </div>
-</div>
-      <div class="overflow-x-auto border border-gray-200 rounded">
-        <table class="w-full text-sm">
-          <thead>
-            <tr class="border-b border-gray-200 bg-gray-50">
-              <th class="text-left p-3 w-16">ID</th>
-              <th class="text-left p-3 w-32">Product Code</th>
-              <th class="text-left p-3">Detail</th>
-              <th class="text-left p-3 w-24">Unit</th>
-              <th class="text-left p-3 w-28">Amount</th>
-              <th class="w-10"></th>
-            </tr>
-          </thead>
-          <tbody id="line-items-body"></tbody>
-        </table>
+    <a class="btn btn-received"
+       href="https://script.google.com/macros/s/AKfycbw4r0Bkfy7nyfYZaQBG0kkfT0o3PBVEoKkJ4MWWBx_ArfwKpYFKukVfNBoDjnddHWjEkQ/exec"
+       target="_blank" rel="noopener noreferrer">
+      <div class="btn-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
       </div>
-    </section>
+      <div class="btn-text">
+        รับพัสดุเข้าคลัง
+        <small>Received Item Form</small>
+      </div>
+      <div class="btn-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
+    </a>
 
-    <!-- Bottom buttons -->
-    <div class="flex flex-col sm:flex-row justify-end gap-4">
-      <button type="button" class="btn-outline rounded font-bold text-sm h-11 px-6" onclick="askReset()">Reset Form</button>
-      <button type="submit" id="submit-btn" class="btn-primary rounded font-bold text-sm h-11 px-8 min-w-[200px]">Submit Data</button>
-    </div>
-  </form>
-</main>
+        <a class="btn btn-received"
+       href="https://script.google.com/macros/s/AKfycbxL2hyZMcNxsce7XvU6I6wCpr0CX7rxg37ZMrY0CrxwTwFhFLZYSYL0QyUl69kTtk2C/exec"
+       target="_blank" rel="noopener noreferrer">
+      <div class="btn-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <div class="btn-text">
+        รายการเบิกวัสดุ กปน.
+        <small>Project Supply Requisition</small>
+      </div>
+      <div class="btn-arrow">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
+    </a>
+  </main>
 
-<script>
-/** =====================================================
- *  FormManager - client-side orchestrator
- *  ===================================================== */
-class FormManager {
-  constructor() {
-    this.confirmResolver = null;
-    this.init();
-  }
+  <footer>
+    <div class="user-email">เข้าสู่ระบบ: <?= userEmail ?></div>
+    © 2026 Supply Matter — ระบบจัดการวัสดุและพัสดุ
+  </footer>
 
-  init() {
-  document.getElementById('date-field').value = new Date().toISOString().split('T')[0];
-  this.bindConfirmModal();
-  this.populateBulkRowDropdown(); // ✅ NEW
-  this.loadInitialData();
-  this.addRow(); // start with 1 row
-}
-
-  // ---------- UI helpers ----------
-  showLoading(text) {
-    document.getElementById('loading-text').textContent = text || 'Loading...';
-    document.getElementById('loading-overlay').classList.add('show');
-  }
-  hideLoading() { document.getElementById('loading-overlay').classList.remove('show'); }
-
-  showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'toast ' + (type || 'success') + ' show';
-    setTimeout(() => t.classList.remove('show'), 3500);
-  }
-
-  confirm(msg) {
-    return new Promise((resolve) => {
-      document.getElementById('confirm-message').textContent = msg;
-      document.getElementById('confirm-overlay').classList.add('show');
-      this.confirmResolver = resolve;
-    });
-  }
-  bindConfirmModal() {
-    document.getElementById('confirm-yes').onclick = () => {
-      document.getElementById('confirm-overlay').classList.remove('show');
-      if (this.confirmResolver) { this.confirmResolver(true); this.confirmResolver = null; }
-    };
-    document.getElementById('confirm-no').onclick = () => {
-      document.getElementById('confirm-overlay').classList.remove('show');
-      if (this.confirmResolver) { this.confirmResolver(false); this.confirmResolver = null; }
-    };
-  }
-
-  // ---------- Data loading ----------
-  loadInitialData() {
-    this.showLoading('Loading PO Numbers...');
-    google.script.run
-      .withSuccessHandler((data) => {
-        const sel = document.getElementById('po-number');
-        (data.poNumbers || []).forEach(po => {
-          const o = document.createElement('option');
-          o.value = po; o.textContent = po;
-          sel.appendChild(o);
-        });
-        this.hideLoading();
-      })
-      .withFailureHandler((err) => {
-        this.hideLoading();
-        this.showToast('Failed to load PO Numbers: ' + err.message, 'error');
-      })
-      .getInitialData();
-  }
-
-  onPOChange() {
-    const po = document.getElementById('po-number').value;
-    const contractField = document.getElementById('contract');
-    const placeField = document.getElementById('place-code');
-    const datalist = document.getElementById('place-code-list');
-
-    contractField.value = '';
-    placeField.value = '';
-    datalist.innerHTML = '';
-    if (!po) return;
-
-    this.showLoading('Loading contract & place codes...');
-    let pending = 2;
-    const done = () => { if (--pending === 0) this.hideLoading(); };
-
-    google.script.run
-      .withSuccessHandler((c) => { contractField.value = c || ''; done(); })
-      .withFailureHandler(() => { this.showToast('Contract lookup failed', 'error'); done(); })
-      .getContractByPO(po);
-
-    google.script.run
-      .withSuccessHandler((codes) => {
-        (codes || []).forEach(c => {
-          const o = document.createElement('option');
-          o.value = c;
-          datalist.appendChild(o);
-        });
-        done();
-      })
-      .withFailureHandler(() => { this.showToast('Place codes lookup failed', 'error'); done(); })
-      .getPlaceCodesByPO(po);
-  }
-
-  // ---------- Line items ----------
-  addRow(focusNew = true) {
-  const tbody = document.getElementById('line-items-body');
-
-  // ✅ Enforce max 100 rows
-  if (tbody.children.length >= 100) {
-    this.showToast('Maximum 100 rows allowed', 'error');
-    return false;
-  }
-
-  const id = tbody.children.length + 1;
-  const tr = document.createElement('tr');
-  tr.dataset.id = id;
-  tr.innerHTML =
-    '<td class="p-3 id-cell">' + id + '</td>' +
-    '<td class="p-3"><input type="text" class="field-input table-input code-cell" placeholder="Code"></td>' +
-    '<td class="p-3"><input type="text" class="field-input table-input detail-cell" placeholder="Auto" readonly></td>' +
-    '<td class="p-3"><input type="text" class="field-input table-input unit-cell" placeholder="Auto" readonly></td>' +
-    // ✅ Changed: integer only (step=1, no decimal)
-    '<td class="p-3"><input type="number" step="1" min="0" class="field-input table-input amount-cell" placeholder="0" oninput="enforceInteger(this)"></td>' +
-    '<td class="p-3 text-center">' +
-      '<button type="button" class="delete-btn text-gray-400 font-bold text-lg" title="Delete row">−</button>' +
-    '</td>';
-
-  const deleteBtn = tr.querySelector('.delete-btn');
-  deleteBtn.addEventListener('click', () => this.askDeleteRow(tr));
-
-  const codeInput = tr.querySelector('.code-cell');
-  codeInput.addEventListener('blur', () => this.onProductCodeChange(codeInput));
-
-  tbody.appendChild(tr);
-  if (focusNew) codeInput.focus();
-  return true;
-}
-
-/**
- * ✅ NEW: Populate the bulk row dropdown 1–100
- */
-populateBulkRowDropdown() {
-  const sel = document.getElementById('bulk-row-count');
-  if (!sel) return;
-  sel.innerHTML = '';
-  for (let i = 1; i <= 100; i++) {
-    const o = document.createElement('option');
-    o.value = i;
-    o.textContent = i;
-    if (i === 1) o.selected = true;
-    sel.appendChild(o);
-  }
-}
-
-/**
- * ✅ NEW: Set table to an exact N rows (1–100).
- * Adds rows if needed; if reducing, asks confirmation when data exists.
- */
-async applyBulkRows() {
-  const sel = document.getElementById('bulk-row-count');
-  const target = parseInt(sel.value, 10);
-  if (isNaN(target) || target < 1 || target > 100) {
-    this.showToast('Please choose 1–100 rows', 'error');
-    return;
-  }
-
-  const tbody = document.getElementById('line-items-body');
-  const current = tbody.children.length;
-
-  if (target === current) {
-    this.showToast('Already at ' + target + ' rows', 'success');
-    return;
-  }
-
-  // Reducing rows — check if any data would be lost
-  if (target < current) {
-    const rowsToRemove = Array.from(tbody.children).slice(target);
-    const hasData = rowsToRemove.some(r =>
-      r.querySelector('.code-cell').value.trim() !== '' ||
-      r.querySelector('.amount-cell').value.trim() !== ''
-    );
-    if (hasData) {
-      const ok = await this.confirm('Reduce to ' + target + ' rows? ' + (current - target) + ' row(s) with data will be removed.');
-      if (!ok) return;
-    }
-    while (tbody.children.length > target) {
-      tbody.removeChild(tbody.lastElementChild);
-    }
-    this.renumberRows();
-    this.showToast('Set to ' + target + ' rows', 'success');
-    return;
-  }
-
-  // Adding rows
-  const toAdd = target - current;
-  for (let i = 0; i < toAdd; i++) {
-    this.addRow(false); // don't steal focus on each iteration
-  }
-  this.showToast('Added ' + toAdd + ' rows (total ' + target + ')', 'success');
-}
-
-  onProductCodeChange(input) {
-    const code = input.value.trim();
-    const row = input.closest('tr');
-    const detail = row.querySelector('.detail-cell');
-    const unit = row.querySelector('.unit-cell');
-    if (!code) { detail.value = ''; unit.value = ''; return; }
-
-    google.script.run
-      .withSuccessHandler((info) => {
-        detail.value = info.detail || '';
-        unit.value = info.unit || '';
-        if (!info.detail) this.showToast('Product "' + code + '" not found', 'error');
-      })
-      .withFailureHandler(() => this.showToast('Product lookup failed', 'error'))
-      .getProductInfo(code);
-  }
-
-  /**
-   * ✅ FIXED: Delete row with confirmation.
-   * Accepts the <tr> element directly instead of relying on `closest()` of a button.
-   */
-  async askDeleteRow(rowElement) {
-    if (!rowElement) return;
-    const id = rowElement.dataset.id || rowElement.querySelector('.id-cell')?.textContent || '?';
-    const ok = await this.confirm('Delete row #' + id + '? Confirm?');
-    if (ok) {
-      rowElement.remove();
-      this.renumberRows();
-      this.showToast('Row #' + id + ' deleted', 'success');
-
-      // If no rows left, add an empty one back
-      if (document.getElementById('line-items-body').children.length === 0) {
-        this.addRow();
-      }
-    }
-  }
-
-  async askClearAll() {
-    const tbody = document.getElementById('line-items-body');
-    if (tbody.children.length === 0) return;
-    const ok = await this.confirm('Clear all rows? This cannot be undone.');
-    if (ok) { tbody.innerHTML = ''; this.addRow(); }
-  }
-
-  renumberRows() {
-    const rows = document.querySelectorAll('#line-items-body tr');
-    rows.forEach((r, i) => {
-      r.dataset.id = i + 1;
-      r.querySelector('.id-cell').textContent = i + 1;
-    });
-  }
-
-  // ---------- Reset / Submit ----------
-  async askReset() {
-    const ok = await this.confirm('Reset entire form? All data will be lost.');
-    if (ok) this.resetForm();
-  }
-
-  resetForm() {
-    document.getElementById('req-form').reset();
-    document.getElementById('contract').value = '';
-    document.getElementById('place-code-list').innerHTML = '';
-    document.getElementById('line-items-body').innerHTML = '';
-    document.getElementById('date-field').value = new Date().toISOString().split('T')[0];
-    document.getElementById('sap-error').classList.add('hidden');
-    document.getElementById('sap-number').classList.remove('error');
-    this.addRow();
-  }
-
-  collectFormData() {
-    const lineItems = [];
-    document.querySelectorAll('#line-items-body tr').forEach((row, i) => {
-      const code = row.querySelector('.code-cell').value.trim();
-      const amount = row.querySelector('.amount-cell').value.trim();
-      if (code || amount) {
-        lineItems.push({
-          ID: i + 1,
-          Product_Code: code,
-          Detail: row.querySelector('.detail-cell').value.trim(),
-          Unit: row.querySelector('.unit-cell').value.trim(),
-          Amount: parseInt(amount, 10) || 0
-        });
-      }
-    });
-return {
-  PO_Number: document.getElementById('po-number').value.trim(),
-  // ✅ Contract excluded from submission payload (kept in UI for reference only)
-  Place_Code: document.getElementById('place-code').value.trim(),
-      SAP_Number: document.getElementById('sap-number').value.trim(),
-      Number: document.getElementById('number-field').value.trim(),
-      Date: document.getElementById('date-field').value,
-      Line_Items: lineItems
-    };
-  }
-
-  handleSubmit() {
-    const data = this.collectFormData();
-
-    if (!data.PO_Number) { this.showToast('PO Number is required', 'error'); return; }
-    if (!data.Place_Code) { this.showToast('Place Code is required', 'error'); return; }
-    if (!/^\d{10}$/.test(data.SAP_Number)) { this.showToast('SAP Number must be exactly 10 digits', 'error'); return; }
-    if (data.Line_Items.length === 0) { this.showToast('At least one line item is required', 'error'); return; }
-
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true; btn.textContent = 'Submitting...';
-    this.showLoading('Submitting data...');
-
-    google.script.run
-      .withSuccessHandler((res) => {
-        this.hideLoading();
-        btn.disabled = false; btn.textContent = 'Submit Data';
-        if (res.success) {
-          this.showToast(res.message, 'success');
-          this.resetForm();
-        } else {
-          this.showToast((res.errors || []).join(' | '), 'error');
-        }
-      })
-      .withFailureHandler((err) => {
-        this.hideLoading();
-        btn.disabled = false; btn.textContent = 'Submit Data';
-        this.showToast('Submission error: ' + err.message, 'error');
-      })
-      .submitData(data);
-  }
-}
-
-// SAP digit guard + visual feedback
-function validateSAP(input) {
-  input.value = input.value.replace(/\D/g, '').slice(0, 10);
-  const err = document.getElementById('sap-error');
-  if (input.value.length > 0 && input.value.length !== 10) {
-    input.classList.add('error');
-    err.classList.remove('hidden');
-  } else {
-    input.classList.remove('error');
-    err.classList.add('hidden');
-  }
-}
-
-// ✅ Explicit global so inline handlers (and console) can access reliably
-window.form = null;
-
-window.addEventListener('DOMContentLoaded', () => {
-  window.form = new FormManager();
-});
-
-// Inline-handler proxies
-function onPOChange() { window.form.onPOChange(); }
-function addRow() { window.form.addRow(); }
-function clearAll() { window.form.askClearAll(); }
-function askReset() { window.form.askReset(); }
-function handleSubmit(e) { e.preventDefault(); window.form.handleSubmit(); }
-
-// ✅ NEW: Strip non-digits as user types in Amount fields
-function enforceInteger(input) {
-  input.value = input.value.replace(/\D/g, '');
-}
-
-// ✅ NEW: Inline-handler proxy for bulk row apply
-function applyBulkRows() { window.form.applyBulkRows(); }
-</script>
 </body>
 </html>
