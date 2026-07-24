@@ -1,443 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reservation Request System</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5e6f3 0%, #e6f3f5 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            padding: 40px;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #d4a5d9;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #a8a8a8;
-            font-size: 14px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #6b6b6b;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #f0e6f0;
-            border-radius: 10px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            background-color: #faf8fc;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #d4a5d9;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(212, 165, 217, 0.1);
-        }
-
-        input:disabled,
-        select:disabled {
-            background-color: #f0f0f0;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-submit {
-            background: linear-gradient(135deg, #d4a5d9 0%, #c49acc 100%);
-            color: white;
-        }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(212, 165, 217, 0.3);
-        }
-
-        .btn-reset {
-            background: linear-gradient(135deg, #c2dfe3 0%, #a8d5e0 100%);
-            color: #2c5f6f;
-        }
-
-        .btn-reset:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(168, 213, 224, 0.3);
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .alert.success {
-            background-color: #d4f1d4;
-            color: #2d6a2d;
-            border-left: 4px solid #4caf50;
-            display: block;
-        }
-
-        .alert.error {
-            background-color: #fde6e6;
-            color: #a52a2a;
-            border-left: 4px solid #f44336;
-            display: block;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .spinner {
-            border: 3px solid #f0e6f0;
-            border-top: 3px solid #d4a5d9;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .required {
-            color: #e8a0a0;
-        }
-    </style>
+<base target="_top">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Requisition Form</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Noto Sans Thai', sans-serif; background:#fff; color:#1A1A1A; }
+  .field-label { font-size:12px; text-transform:uppercase; color:#666; margin-bottom:4px; display:block; font-weight:600; letter-spacing:.5px; }
+  .field-input { height:40px; background:#F5F5F5; border:1px solid #CCCCCC; border-radius:4px; padding:8px 12px; width:100%; font-size:14px; color:#1A1A1A; font-family:'Noto Sans Thai',sans-serif; transition:border-color .15s; }
+  .field-input:focus { outline:none; border-color:#2C3E50; background:#FFFFFF; }
+  .field-input.error { border-color:#DC2626; background:#FEF2F2; }
+  .field-input:read-only { background:#EEEEEE; color:#666; cursor:not-allowed; }
+  .table-input { height:36px; font-size:13px; }
+  table th { font-size:12px; text-transform:uppercase; color:#666; font-weight:600; }
+  table tbody tr:nth-child(even) { background:#FAFAFA; }
+  .btn-primary { background:#2C3E50; color:#fff; transition:background .15s; }
+  .btn-primary:hover:not(:disabled) { background:#34495E; }
+  .btn-primary:disabled { background:#999; cursor:not-allowed; opacity:.6; }
+  .btn-outline { background:#fff; border:1px solid #CCCCCC; color:#1A1A1A; transition:all .15s; }
+  .btn-outline:hover { border-color:#2C3E50; background:#F5F5F5; }
+  .delete-btn { transition:color .15s; }
+  .delete-btn:hover { color:#DC2626; }
+  .error-text { color:#DC2626; font-size:12px; margin-top:4px; }
+  .loader { border:3px solid #f3f3f3; border-top:3px solid #2C3E50; border-radius:50%; width:24px; height:24px; animation:spin 1s linear infinite; }
+  @keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; z-index:50; }
+  .overlay.show { display:flex; }
+  .modal { background:#fff; border-radius:8px; padding:24px; max-width:400px; width:90%; box-shadow:0 10px 25px rgba(0,0,0,.2); }
+  .toast { position:fixed; top:20px; right:20px; padding:12px 20px; border-radius:4px; color:#fff; font-weight:600; font-size:14px; z-index:60; transform:translateX(120%); transition:transform .3s ease; max-width:380px; }
+  .toast.show { transform:translateX(0); }
+  .toast.success { background:#16A34A; }
+  .toast.error { background:#DC2626; }
+</style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-calendar-check"></i> CPAC Reservation Request</h1>
-            <p>กรอกและเลือกข้อมูลทั้งหมดที่มีดอกจันสีแดง</p>
-        </div>
+<body class="min-h-screen p-6 md:p-10">
 
-        <div id="alertMessage" class="alert"></div>
-        <div id="loading" class="loading">
-            <div class="spinner"></div>
-            <p style="margin-top: 10px; color: #d4a5d9;">Submitting your reservation...</p>
-        </div>
+<!-- Loading -->
+<div id="loading-overlay" class="overlay">
+  <div class="modal flex flex-col items-center gap-3">
+    <div class="loader"></div>
+    <p id="loading-text" class="text-sm">Loading...</p>
+  </div>
+</div>
 
-        <form id="reservationForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="contract">Contract <span class="required">*</span></label>
-                    <select id="contract" name="contract" required>
-                        <option value="">เลือกสัญญา</option>
-                        <option value="Contract A">ป17-06-68</option>
-                        <option value="Contract B">ป54-07-68</option>
-                        <option value="Contract C">ฝจส.ป-06(68)</option>
-                        <option value="Contract D">ฝจส.ป-11(68)</option>
-                        <option value="Contract E">ฝจส.ป-14(68)</option>
-                        <option value="Contract F">ฝจส.ป-15(68)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="place">Place <span class="required">*</span></label>
-                    <select id="place" name="place" required disabled>
-                        <option value="">เลือกเส้นทาง</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="Concrete">Concrete <span class="required">*</span></label>
-                    <select id="Concrete" name="Concrete" required>
-                        <option value="">Select a Concrete</option>
-                        <option value="CY 210 KSC./7 DAYS">CY 210 KSC./7 DAYS</option>
-                        <option value="CY 280 KSC./7 DAYS">CY 280 KSC./7 DAYS</option>
-                        <option value="CY 280 KSC./7 DAYS">CY 280 KSC./24 HRS.</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="contract">Size <span class="required">*</span></label>
-                    <select id="Size" name="Size" required>
-                        <option value="">Select a Size</option>
-                        <option value="Small">รถโม่เล็ก</option>
-                        <option value="Big">รถโม่ใหญ่</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="Amount">จำนวน <span class="required">*</span></label>
-                    <input type="Amount" id="Amount" name="Amount" placeholder="จำนวนต่อวัน" required>
-                </div>
-
-               <div class="form-group">
-                    <label for="timeSlot">Time Slot <span class="required">*</span></label>
-                    <select id="timeSlot" name="timeSlot" required>
-                        <option value="">เวลาที่ต้องการเท</option>
-                        <option value="09:00 AM">09:00 AM</option>
-                        <option value="10:00 AM">10:00 AM</option>
-                        <option value="11:00 AM">11:00 AM</option>
-                        <option value="12:00 PM">12:00 PM</option>
-                        <option value="01:00 PM">01:00 PM</option>
-                        <option value="02:00 PM">02:00 PM</option>
-                        <option value="03:00 PM">03:00 PM</option>
-                        <option value="04:00 PM">04:00 PM</option>
-                        <option value="05:00 PM">05:00 PM</option>
-                        <option value="06:00 PM">06:00 PM</option>
-                    </select>
-                </div>
-            </div>
-            
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="startDate">เริ่มเทตั้งแต่ <span class="required">*</span></label>
-                    <input type="date" id="startDate" name="startDate" required>
-                </div>
-    
-                <div class="form-group">
-                    <label for="endDate">ถึงวันที่ <span class="required">*</span></label>
-                    <input type="date" id="endDate" name="endDate" required>
-                </div>
-            </div>
-    
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="email">ช่างหน้างาน <span class="required">*</span></label>
-                    <input type="Name" id="Name" name="Name" placeholder="ชื่อช่าง" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">เบอร์โทรศัพท์</label>
-                    <input type="tel" id="phone" name="phone" placeholder="123-456-7899" required>
-                </div>
-            </div>
-                
-            <div class="form-group">
-                <label for="specialRequests">หมายเหตุ</label>
-                <textarea id="specialRequests" name="specialRequests" placeholder="กรณี ช่างคนใหม่ ไม่มีให้เลือกให้พิมพ์ชื่อและเบอร์โทรศัพท์ตรงนี้ + กรณี เทคอนกรีตอื่นๆ"></textarea>
-            </div>
-
-            <div class="button-group">
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-paper-plane"></i> Submit Reservation
-                </button>
-                <button type="reset" class="btn-reset">
-                    <i class="fas fa-redo"></i> Clear Form
-                </button>
-            </div>
-        </form>
+<!-- Confirm -->
+<div id="confirm-overlay" class="overlay">
+  <div class="modal">
+    <h3 class="font-bold text-lg mb-2">Confirm Action</h3>
+    <p id="confirm-message" class="text-sm text-gray-700 mb-5">Are you sure?</p>
+    <div class="flex justify-end gap-3">
+      <button type="button" id="confirm-no" class="btn-outline rounded px-4 py-2 text-sm font-semibold">Cancel</button>
+      <button type="button" id="confirm-yes" class="btn-primary rounded px-4 py-2 text-sm font-semibold">Confirm</button>
     </div>
+  </div>
+</div>
 
-    <script>
-        // Define the relationship between contracts and places
-        const contractPlaceMapping = {
-            'Contract A': ['ซอยเทศบาลบางปู 118', 'ซอยหมู่บ้านเด่นชัยสามัคคี', 'ซอยวัดสุขกร-สวมส้ม'],
-            'Contract B': ['ซอยโรงสวด'],
-            'Contract C': ['ถนนรามคำแหง', 'ซอยย่อยข้าง ทบ.6', 'หมู่บ้านเพชรงาม 3', 'ซอยเทศบาลบางปู 59/1'],
-            'Contract D': ['ซอยบางหัวเสือ'],
-            'Contract E': ['ซอยพัฒนาการ 20 แยก 5', 'ซอยเทศบาลบางปู 61 A (แยกผู้ใหญ่จิต)'],
-            'Contract F': ['ซอยพัฒนาการ 52 (หมู่บ้านเคหะนคร)']
-        };
+<!-- Toast -->
+<div id="toast" class="toast"></div>
 
-        // Handle contract change event
-        document.getElementById('contract').addEventListener('change', function() {
-            const selectedContract = this.value;
-            const placeSelect = document.getElementById('place');
-            
-            // Clear existing options except the first one
-            placeSelect.innerHTML = '<option value="">Select a place</option>';
-            
-            if (selectedContract && contractPlaceMapping[selectedContract]) {
-                // Enable the place dropdown and add options
-                placeSelect.disabled = false;
-                contractPlaceMapping[selectedContract].forEach(place => {
-                    const option = document.createElement('option');
-                    option.value = place;
-                    option.textContent = place;
-                    placeSelect.appendChild(option);
-                });
-            } else {
-                // Disable if no contract selected
-                placeSelect.disabled = true;
-            }
-        });
+<main class="max-w-5xl mx-auto">
+  <header class="mb-8">
+    <h1 class="text-3xl font-bold">Requisition Form</h1>
+    <p class="text-sm text-gray-600 mt-1">Document Information</p>
+  </header>
 
-// Set minimum date to today
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('startDate').setAttribute('min', today);
-document.getElementById('endDate').setAttribute('min', today);
+  <form id="req-form" onsubmit="handleSubmit(event)">
+    <!-- Main fields -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-10">
+      <div>
+        <label class="field-label" for="po-number">PO Number *</label>
+        <select id="po-number" class="field-input" onchange="onPOChange()">
+          <option value="">-- Select --</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label" for="contract">Contract</label>
+        <input id="contract" type="text" class="field-input" readonly placeholder="Auto-populated">
+      </div>
+      <div>
+        <label class="field-label" for="place-code">Place Code *</label>
+        <input id="place-code" type="text" class="field-input"
+               list="place-code-list" placeholder="xx-xx-xx-xxxxxx" autocomplete="off">
+        <datalist id="place-code-list"></datalist>
+      </div>
+      <div>
+        <label class="field-label" for="sap-number">SAP Number *</label>
+        <input id="sap-number" type="text" class="field-input" maxlength="10"
+               placeholder="10 digits" inputmode="numeric" oninput="validateSAP(this)">
+        <span id="sap-error" class="error-text hidden">Must be exactly 10 digits</span>
+      </div>
+      <div>
+        <label class="field-label" for="number-field">Number</label>
+        <input id="number-field" type="text" class="field-input" placeholder="Enter number">
+      </div>
+      <div>
+        <label class="field-label" for="date-field">Date</label>
+        <input id="date-field" type="date" class="field-input">
+      </div>
+    </section>
 
-// Convert yyyy-mm-dd → dd-mm-yyyy
-function formatDate(dateString) {
-    const d = new Date(dateString);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
+    <!-- Line items -->
+    <section class="mb-10">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+  <h2 class="text-lg font-semibold">Line Items</h2>
+  <div class="flex items-center gap-3 flex-wrap">
+    <button type="button" onclick="clearAll()" class="btn-outline flex items-center gap-1 px-3 py-2 rounded text-sm font-semibold">🗑 Clear All</button>
+    <button type="button" onclick="addRow()" class="btn-primary flex items-center gap-1 px-3 py-2 rounded text-sm font-semibold">+ Add New Row</button>
+
+    <!-- ✅ NEW: Bulk row selector -->
+    <div class="flex items-center gap-2 border-l border-gray-300 pl-3">
+      <label for="bulk-row-count" class="text-xs text-gray-600 uppercase font-semibold whitespace-nowrap">Set Rows:</label>
+      <select id="bulk-row-count" class="field-input" style="height:38px; width:90px; padding:4px 8px;">
+        <!-- Options populated by JS -->
+      </select>
+      <button type="button" onclick="applyBulkRows()" class="btn-outline rounded px-3 py-2 text-sm font-semibold">Apply</button>
+    </div>
+  </div>
+</div>
+      <div class="overflow-x-auto border border-gray-200 rounded">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-gray-200 bg-gray-50">
+              <th class="text-left p-3 w-16">ID</th>
+              <th class="text-left p-3 w-32">Product Code</th>
+              <th class="text-left p-3">Detail</th>
+              <th class="text-left p-3 w-24">Unit</th>
+              <th class="text-left p-3 w-28">Amount</th>
+              <th class="w-10"></th>
+            </tr>
+          </thead>
+          <tbody id="line-items-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Bottom buttons -->
+    <div class="flex flex-col sm:flex-row justify-end gap-4">
+      <button type="button" class="btn-outline rounded font-bold text-sm h-11 px-6" onclick="askReset()">Reset Form</button>
+      <button type="submit" id="submit-btn" class="btn-primary rounded font-bold text-sm h-11 px-8 min-w-[200px]">Submit Data</button>
+    </div>
+  </form>
+</main>
+
+<script>
+/** =====================================================
+ *  FormManager - client-side orchestrator
+ *  ===================================================== */
+class FormManager {
+  constructor() {
+    this.confirmResolver = null;
+    this.init();
+  }
+
+  init() {
+  document.getElementById('date-field').value = new Date().toISOString().split('T')[0];
+  this.bindConfirmModal();
+  this.populateBulkRowDropdown(); // ✅ NEW
+  this.loadInitialData();
+  this.addRow(); // start with 1 row
 }
 
-document.getElementById('reservationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+  // ---------- UI helpers ----------
+  showLoading(text) {
+    document.getElementById('loading-text').textContent = text || 'Loading...';
+    document.getElementById('loading-overlay').classList.add('show');
+  }
+  hideLoading() { document.getElementById('loading-overlay').classList.remove('show'); }
 
-    const formData = {
-        contract: document.getElementById('contract').value,
-        place: document.getElementById('place').value,
-        Concrete: document.getElementById('Concrete').value,
-        Size: document.getElementById('Size').value,
-        Amount: document.getElementById('Amount').value,
-        timeSlot: document.getElementById('timeSlot').value,
-        startDate: formatDate(document.getElementById('startDate').value),
-        endDate: formatDate(document.getElementById('endDate').value),
-        Name: document.getElementById('Name').value,
-        phone: document.getElementById('phone').value,
-        specialRequests: document.getElementById('specialRequests').value
+  showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + (type || 'success') + ' show';
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+
+  confirm(msg) {
+    return new Promise((resolve) => {
+      document.getElementById('confirm-message').textContent = msg;
+      document.getElementById('confirm-overlay').classList.add('show');
+      this.confirmResolver = resolve;
+    });
+  }
+  bindConfirmModal() {
+    document.getElementById('confirm-yes').onclick = () => {
+      document.getElementById('confirm-overlay').classList.remove('show');
+      if (this.confirmResolver) { this.confirmResolver(true); this.confirmResolver = null; }
     };
+    document.getElementById('confirm-no').onclick = () => {
+      document.getElementById('confirm-overlay').classList.remove('show');
+      if (this.confirmResolver) { this.confirmResolver(false); this.confirmResolver = null; }
+    };
+  }
 
-    showLoading(true);
+  // ---------- Data loading ----------
+  loadInitialData() {
+    this.showLoading('Loading PO Numbers...');
+    google.script.run
+      .withSuccessHandler((data) => {
+        const sel = document.getElementById('po-number');
+        (data.poNumbers || []).forEach(po => {
+          const o = document.createElement('option');
+          o.value = po; o.textContent = po;
+          sel.appendChild(o);
+        });
+        this.hideLoading();
+      })
+      .withFailureHandler((err) => {
+        this.hideLoading();
+        this.showToast('Failed to load PO Numbers: ' + err.message, 'error');
+      })
+      .getInitialData();
+  }
+
+  onPOChange() {
+    const po = document.getElementById('po-number').value;
+    const contractField = document.getElementById('contract');
+    const placeField = document.getElementById('place-code');
+    const datalist = document.getElementById('place-code-list');
+
+    contractField.value = '';
+    placeField.value = '';
+    datalist.innerHTML = '';
+    if (!po) return;
+
+    this.showLoading('Loading contract & place codes...');
+    let pending = 2;
+    const done = () => { if (--pending === 0) this.hideLoading(); };
 
     google.script.run
-        .withSuccessHandler(function(result) {
-            showLoading(false);
-            if (result.success) {
-                showAlert(result.message, 'success');
-                document.getElementById('reservationForm').reset();
-                document.getElementById('place').disabled = true;
-            } else {
-                showAlert(result.message, 'error');
-            }
-        })
-        .withFailureHandler(function(error) {
-            showLoading(false);
-            showAlert('Error: ' + error, 'error');
-        })
-        .saveReservation(formData);
+      .withSuccessHandler((c) => { contractField.value = c || ''; done(); })
+      .withFailureHandler(() => { this.showToast('Contract lookup failed', 'error'); done(); })
+      .getContractByPO(po);
+
+    google.script.run
+      .withSuccessHandler((codes) => {
+        (codes || []).forEach(c => {
+          const o = document.createElement('option');
+          o.value = c;
+          datalist.appendChild(o);
+        });
+        done();
+      })
+      .withFailureHandler(() => { this.showToast('Place codes lookup failed', 'error'); done(); })
+      .getPlaceCodesByPO(po);
+  }
+
+  // ---------- Line items ----------
+  addRow(focusNew = true) {
+  const tbody = document.getElementById('line-items-body');
+
+  // ✅ Enforce max 100 rows
+  if (tbody.children.length >= 100) {
+    this.showToast('Maximum 100 rows allowed', 'error');
+    return false;
+  }
+
+  const id = tbody.children.length + 1;
+  const tr = document.createElement('tr');
+  tr.dataset.id = id;
+  tr.innerHTML =
+    '<td class="p-3 id-cell">' + id + '</td>' +
+    '<td class="p-3"><input type="text" class="field-input table-input code-cell" placeholder="Code"></td>' +
+    '<td class="p-3"><input type="text" class="field-input table-input detail-cell" placeholder="Auto" readonly></td>' +
+    '<td class="p-3"><input type="text" class="field-input table-input unit-cell" placeholder="Auto" readonly></td>' +
+    // ✅ Changed: integer only (step=1, no decimal)
+    '<td class="p-3"><input type="number" step="1" min="0" class="field-input table-input amount-cell" placeholder="0" oninput="enforceInteger(this)"></td>' +
+    '<td class="p-3 text-center">' +
+      '<button type="button" class="delete-btn text-gray-400 font-bold text-lg" title="Delete row">−</button>' +
+    '</td>';
+
+  const deleteBtn = tr.querySelector('.delete-btn');
+  deleteBtn.addEventListener('click', () => this.askDeleteRow(tr));
+
+  const codeInput = tr.querySelector('.code-cell');
+  codeInput.addEventListener('blur', () => this.onProductCodeChange(codeInput));
+
+  tbody.appendChild(tr);
+  if (focusNew) codeInput.focus();
+  return true;
+}
+
+/**
+ * ✅ NEW: Populate the bulk row dropdown 1–100
+ */
+populateBulkRowDropdown() {
+  const sel = document.getElementById('bulk-row-count');
+  if (!sel) return;
+  sel.innerHTML = '';
+  for (let i = 1; i <= 100; i++) {
+    const o = document.createElement('option');
+    o.value = i;
+    o.textContent = i;
+    if (i === 1) o.selected = true;
+    sel.appendChild(o);
+  }
+}
+
+/**
+ * ✅ NEW: Set table to an exact N rows (1–100).
+ * Adds rows if needed; if reducing, asks confirmation when data exists.
+ */
+async applyBulkRows() {
+  const sel = document.getElementById('bulk-row-count');
+  const target = parseInt(sel.value, 10);
+  if (isNaN(target) || target < 1 || target > 100) {
+    this.showToast('Please choose 1–100 rows', 'error');
+    return;
+  }
+
+  const tbody = document.getElementById('line-items-body');
+  const current = tbody.children.length;
+
+  if (target === current) {
+    this.showToast('Already at ' + target + ' rows', 'success');
+    return;
+  }
+
+  // Reducing rows — check if any data would be lost
+  if (target < current) {
+    const rowsToRemove = Array.from(tbody.children).slice(target);
+    const hasData = rowsToRemove.some(r =>
+      r.querySelector('.code-cell').value.trim() !== '' ||
+      r.querySelector('.amount-cell').value.trim() !== ''
+    );
+    if (hasData) {
+      const ok = await this.confirm('Reduce to ' + target + ' rows? ' + (current - target) + ' row(s) with data will be removed.');
+      if (!ok) return;
+    }
+    while (tbody.children.length > target) {
+      tbody.removeChild(tbody.lastElementChild);
+    }
+    this.renumberRows();
+    this.showToast('Set to ' + target + ' rows', 'success');
+    return;
+  }
+
+  // Adding rows
+  const toAdd = target - current;
+  for (let i = 0; i < toAdd; i++) {
+    this.addRow(false); // don't steal focus on each iteration
+  }
+  this.showToast('Added ' + toAdd + ' rows (total ' + target + ')', 'success');
+}
+
+  onProductCodeChange(input) {
+    const code = input.value.trim();
+    const row = input.closest('tr');
+    const detail = row.querySelector('.detail-cell');
+    const unit = row.querySelector('.unit-cell');
+    if (!code) { detail.value = ''; unit.value = ''; return; }
+
+    google.script.run
+      .withSuccessHandler((info) => {
+        detail.value = info.detail || '';
+        unit.value = info.unit || '';
+        if (!info.detail) this.showToast('Product "' + code + '" not found', 'error');
+      })
+      .withFailureHandler(() => this.showToast('Product lookup failed', 'error'))
+      .getProductInfo(code);
+  }
+
+  /**
+   * ✅ FIXED: Delete row with confirmation.
+   * Accepts the <tr> element directly instead of relying on `closest()` of a button.
+   */
+  async askDeleteRow(rowElement) {
+    if (!rowElement) return;
+    const id = rowElement.dataset.id || rowElement.querySelector('.id-cell')?.textContent || '?';
+    const ok = await this.confirm('Delete row #' + id + '? Confirm?');
+    if (ok) {
+      rowElement.remove();
+      this.renumberRows();
+      this.showToast('Row #' + id + ' deleted', 'success');
+
+      // If no rows left, add an empty one back
+      if (document.getElementById('line-items-body').children.length === 0) {
+        this.addRow();
+      }
+    }
+  }
+
+  async askClearAll() {
+    const tbody = document.getElementById('line-items-body');
+    if (tbody.children.length === 0) return;
+    const ok = await this.confirm('Clear all rows? This cannot be undone.');
+    if (ok) { tbody.innerHTML = ''; this.addRow(); }
+  }
+
+  renumberRows() {
+    const rows = document.querySelectorAll('#line-items-body tr');
+    rows.forEach((r, i) => {
+      r.dataset.id = i + 1;
+      r.querySelector('.id-cell').textContent = i + 1;
+    });
+  }
+
+  // ---------- Reset / Submit ----------
+  async askReset() {
+    const ok = await this.confirm('Reset entire form? All data will be lost.');
+    if (ok) this.resetForm();
+  }
+
+  resetForm() {
+    document.getElementById('req-form').reset();
+    document.getElementById('contract').value = '';
+    document.getElementById('place-code-list').innerHTML = '';
+    document.getElementById('line-items-body').innerHTML = '';
+    document.getElementById('date-field').value = new Date().toISOString().split('T')[0];
+    document.getElementById('sap-error').classList.add('hidden');
+    document.getElementById('sap-number').classList.remove('error');
+    this.addRow();
+  }
+
+  collectFormData() {
+    const lineItems = [];
+    document.querySelectorAll('#line-items-body tr').forEach((row, i) => {
+      const code = row.querySelector('.code-cell').value.trim();
+      const amount = row.querySelector('.amount-cell').value.trim();
+      if (code || amount) {
+        lineItems.push({
+          ID: i + 1,
+          Product_Code: code,
+          Detail: row.querySelector('.detail-cell').value.trim(),
+          Unit: row.querySelector('.unit-cell').value.trim(),
+          Amount: parseInt(amount, 10) || 0
+        });
+      }
+    });
+return {
+  PO_Number: document.getElementById('po-number').value.trim(),
+  // ✅ Contract excluded from submission payload (kept in UI for reference only)
+  Place_Code: document.getElementById('place-code').value.trim(),
+      SAP_Number: document.getElementById('sap-number').value.trim(),
+      Number: document.getElementById('number-field').value.trim(),
+      Date: document.getElementById('date-field').value,
+      Line_Items: lineItems
+    };
+  }
+
+  handleSubmit() {
+    const data = this.collectFormData();
+
+    if (!data.PO_Number) { this.showToast('PO Number is required', 'error'); return; }
+    if (!data.Place_Code) { this.showToast('Place Code is required', 'error'); return; }
+    if (!/^\d{10}$/.test(data.SAP_Number)) { this.showToast('SAP Number must be exactly 10 digits', 'error'); return; }
+    if (data.Line_Items.length === 0) { this.showToast('At least one line item is required', 'error'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Submitting...';
+    this.showLoading('Submitting data...');
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        this.hideLoading();
+        btn.disabled = false; btn.textContent = 'Submit Data';
+        if (res.success) {
+          this.showToast(res.message, 'success');
+          this.resetForm();
+        } else {
+          this.showToast((res.errors || []).join(' | '), 'error');
+        }
+      })
+      .withFailureHandler((err) => {
+        this.hideLoading();
+        btn.disabled = false; btn.textContent = 'Submit Data';
+        this.showToast('Submission error: ' + err.message, 'error');
+      })
+      .submitData(data);
+  }
+}
+
+// SAP digit guard + visual feedback
+function validateSAP(input) {
+  input.value = input.value.replace(/\D/g, '').slice(0, 10);
+  const err = document.getElementById('sap-error');
+  if (input.value.length > 0 && input.value.length !== 10) {
+    input.classList.add('error');
+    err.classList.remove('hidden');
+  } else {
+    input.classList.remove('error');
+    err.classList.add('hidden');
+  }
+}
+
+// ✅ Explicit global so inline handlers (and console) can access reliably
+window.form = null;
+
+window.addEventListener('DOMContentLoaded', () => {
+  window.form = new FormManager();
 });
 
+// Inline-handler proxies
+function onPOChange() { window.form.onPOChange(); }
+function addRow() { window.form.addRow(); }
+function clearAll() { window.form.askClearAll(); }
+function askReset() { window.form.askReset(); }
+function handleSubmit(e) { e.preventDefault(); window.form.handleSubmit(); }
 
-        function showAlert(message, type) {
-            const alert = document.getElementById('alertMessage');
-            alert.textContent = message;
-            alert.className = 'alert ' + type;
-            
-            if (type === 'success') {
-                setTimeout(() => {
-                    alert.style.display = 'none';
-                }, 4000);
-            }
-        }
+// ✅ NEW: Strip non-digits as user types in Amount fields
+function enforceInteger(input) {
+  input.value = input.value.replace(/\D/g, '');
+}
 
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-        
-    </script>
+// ✅ NEW: Inline-handler proxy for bulk row apply
+function applyBulkRows() { window.form.applyBulkRows(); }
+</script>
 </body>
 </html>
